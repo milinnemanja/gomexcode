@@ -21,7 +21,7 @@ const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p14', name: 'Kivi korpica', code: '30055', category: 'Voće', createdAt: Date.now() },
   { id: 'p15', name: 'Šampinjoni 200 g', code: '71815', category: 'Povrće', createdAt: Date.now() },
   { id: 'p16', name: 'Krastavac kom.', code: '69488', category: 'Povrće', createdAt: Date.now() },
-  { id: 'p17', name: 'Kukuruz kuvani 450 g', code: '79046', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p17', name: 'Kukuruz kuvani 450 g', code: '79046', category: 'Zamrznuto', createdAt: Date.now() },
   { id: 'p18', name: 'Praziluk stiropor', code: '28965', category: 'Povrće', createdAt: Date.now() },
   { id: 'p19', name: 'Šljiva 1', code: '29934', category: 'Voće', createdAt: Date.now() },
   { id: 'p20', name: 'Šljiva crvena', code: '30078', category: 'Voće', createdAt: Date.now() },
@@ -32,7 +32,7 @@ const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p25', name: 'Hokaido bundeva', code: '38410', category: 'Povrće', createdAt: Date.now() },
   { id: 'p26', name: 'Bukovača 300 g', code: '43391', category: 'Povrće', createdAt: Date.now() },
   { id: 'p27', name: 'Jagoda 500 g', code: '24392', category: 'Voće', createdAt: Date.now() },
-  { id: 'p28', name: 'Jagoda mrežica', code: '29576', category: 'Voće', createdAt: Date.now() },
+  { id: 'p28', name: 'Jagoda Merenje', code: '29576', category: 'Voće', createdAt: Date.now() },
   { id: 'p29', name: 'Vita 6L', code: '76454', category: 'Piće', createdAt: Date.now() },
   { id: 'p30', name: 'Pasulj bob', code: '48530', category: 'Pakeraj', createdAt: Date.now() },
   { id: 'p31', name: 'Pasuljica', code: '41943', category: 'Pakeraj', createdAt: Date.now() },
@@ -69,7 +69,7 @@ const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p62', name: 'Nektarina', code: '28873', category: 'Voće', createdAt: Date.now() },
   { id: 'p63', name: 'Kajsija', code: '28984', category: 'Voće', createdAt: Date.now() },
   { id: 'p64', name: 'Breskva', code: '28993', category: 'Voće', createdAt: Date.now() },
-  { id: 'p65', name: 'Šilja crvena 500 g', code: '71819', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p65', name: 'Šilja crvena 500g', code: '71819', category: 'Povrće', createdAt: Date.now() },
   { id: 'p66', name: 'Šilja žuta pak.', code: '71914', category: 'Povrće', createdAt: Date.now() },
   { id: 'p67', name: 'Rukola 100 g', code: '40543', category: 'Povrće', createdAt: Date.now() },
   { id: 'p68', name: 'Orah ljuska 500 g', code: '81421', category: 'Zdrava hrana', createdAt: Date.now() },
@@ -82,7 +82,11 @@ const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p75', name: 'Iceberg seckani 200 g', code: '81466', category: 'Povrće', createdAt: Date.now() },
   { id: 'p76', name: 'Family mix 400 g', code: '81465', category: 'Povrće', createdAt: Date.now() },
   { id: 'p77', name: 'Kupus seckani', code: '81474', category: 'Povrće', createdAt: Date.now() },
-  { id: 'p78', name: 'Baby spanać', code: '81463', category: 'Povrće', createdAt: Date.now() }
+  { id: 'p78', name: 'Baby spanać', code: '81463', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p79', name: 'Baby mix', code: '81462', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p80', name: 'Vitaminski mix', code: '81479', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p81', name: 'Salata Mediterana', code: '81477', category: 'Povrće', createdAt: Date.now() },
+  { id: 'p82', name: 'Šargarepa pilirana', code: '81478', category: 'Povrće', createdAt: Date.now() }
 ];
 
 const DEFAULT_EXPIRY: ExpiryItem[] = [];
@@ -97,6 +101,7 @@ export const storageService = {
     }
     try {
       const parsed = JSON.parse(data);
+      // Ako je lista prazna, a nismo je mi ispraznili (initial_setup_done), vraćamo podrazumevane
       return parsed.length === 0 && !localStorage.getItem('initial_setup_done') ? DEFAULT_PRODUCTS : parsed;
     } catch (e) {
       return DEFAULT_PRODUCTS;
