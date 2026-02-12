@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface HomeProps {
@@ -24,6 +23,9 @@ const Home: React.FC<HomeProps> = ({ onStart }) => {
           <p className="text-4xl md:text-5xl font-black text-orange-500 leading-[1.1] tracking-tight pt-4">
             Šešir nakrivi, <br/>
             i sedi na kasi.
+          </p>
+          <p className="text-[11px] font-bold tracking-wide mt-2" style={{ color: '#ff4d00' }}>
+            Unesi rokove, aplikacija će te obavestiti 7 dana pred istek prijavljenog roka.
           </p>
         </div>
       </div>

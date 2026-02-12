@@ -20,28 +20,30 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
   }
 
   return (
-    <div className="p-4 grid grid-cols-1 gap-3">
-      {products.map((product) => (
-        <div 
-          key={product.id} 
-          className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex justify-between items-center hover:border-orange-200 active:scale-[0.98] transition-all"
-        >
-          <div className="flex-1">
-            <span className="text-[10px] uppercase font-black tracking-widest text-orange-600 mb-1.5 block">
-              {product.category || 'OPŠTE'}
-            </span>
-            <h3 className="text-xl font-extrabold text-slate-900 leading-tight">
-              {product.name}
-            </h3>
+    <div className="flex flex-col min-h-full">
+      <div className="p-4 grid grid-cols-1 gap-3 animate-in fade-in duration-500">
+        {products.map((product) => (
+          <div 
+            key={product.id} 
+            className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex justify-between items-center hover:border-orange-200 active:scale-[0.98] transition-all group"
+          >
+            <div className="flex-1">
+              <span className="text-[10px] uppercase font-black tracking-widest text-orange-600 mb-1.5 block group-hover:translate-x-1 transition-transform">
+                {product.category || 'OPŠTE'}
+              </span>
+              <h3 className="text-xl font-extrabold text-slate-900 leading-tight">
+                {product.name}
+              </h3>
+            </div>
+            <div className="ml-4 bg-slate-900 text-white px-5 py-4 rounded-2xl text-center min-w-[110px] shadow-lg shadow-slate-200 group-hover:bg-orange-600 transition-colors">
+              <span className="text-[10px] block font-black uppercase opacity-60 tracking-widest mb-1">PLU Kod</span>
+              <span className="text-3xl font-black tracking-tighter leading-none">
+                {product.code}
+              </span>
+            </div>
           </div>
-          <div className="ml-4 bg-slate-900 text-white px-5 py-4 rounded-2xl text-center min-w-[110px] shadow-lg shadow-slate-200">
-            <span className="text-[10px] block font-black uppercase opacity-60 tracking-widest mb-1">PLU Kod</span>
-            <span className="text-3xl font-black tracking-tighter leading-none">
-              {product.code}
-            </span>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

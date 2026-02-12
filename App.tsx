@@ -1,16 +1,18 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { ViewMode, Product } from './types';
+import { ViewMode, Product, ExpiryItem } from './types';
 import { storageService } from './services/storageService';
 import ProductList from './components/ProductList';
 import AdminPanel from './components/AdminPanel';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import LoginForm from './components/LoginForm';
+import ExpiryTracker from './components/ExpiryTracker';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('home');
   const [products, setProducts] = useState<Product[]>([]);
+  const [expiryItems, setExpiryItems] = useState<ExpiryItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -18,25 +20,36 @@ const App: React.FC = () => {
   // Initial load
   useEffect(() => {
     setProducts(storageService.getProducts());
-    // Provera da li je sesija aktivna (opciono, za sada samo state)
+    setExpiryItems(storageService.getExpiryItems());
     const savedAuth = sessionStorage.getItem('admin_auth');
     if (savedAuth === 'true') {
       setIsAdminLoggedIn(true);
     }
   }, []);
 
-  const refreshProducts = () => {
+  const refreshData = () => {
     setProducts(storageService.getProducts());
+    setExpiryItems(storageService.getExpiryItems());
   };
 
   const handleAddProduct = (name: string, code: string, category: string) => {
     storageService.addProduct(name, code, category);
-    refreshProducts();
+    refreshData();
   };
 
   const handleDeleteProduct = (id: string) => {
     storageService.deleteProduct(id);
-    refreshProducts();
+    refreshData();
+  };
+
+  const handleAddExpiry = (name: string, code: string, date: string, category: string) => {
+    storageService.addExpiryItem(name, code, date, category);
+    refreshData();
+  };
+
+  const handleDeleteExpiry = (id: string) => {
+    storageService.deleteExpiryItem(id);
+    refreshData();
   };
 
   const handleLogin = (user: string, pass: string) => {
@@ -71,6 +84,8 @@ const App: React.FC = () => {
         return <Home onStart={() => setView('search')} />;
       case 'search':
         return <ProductList products={filteredProducts} />;
+      case 'dates':
+        return <ExpiryTracker items={expiryItems} />;
       case 'admin':
         if (!isAdminLoggedIn) {
           return <LoginForm onLogin={handleLogin} error={loginError} />;
@@ -88,8 +103,11 @@ const App: React.FC = () => {
             </div>
             <AdminPanel 
               products={products} 
+              expiryItems={expiryItems}
               onAdd={handleAddProduct} 
               onDelete={handleDeleteProduct} 
+              onAddExpiry={handleAddExpiry}
+              onDeleteExpiry={handleDeleteExpiry}
             />
           </div>
         );
@@ -99,7 +117,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col max-w-2xl mx-auto bg-white shadow-2xl overflow-hidden border-x border-slate-100">
+    <div className="min-h-screen flex flex-col max-w-2xl mx-auto bg-white shadow-2xl overflow-hidden border-x border-slate-100 pb-20">
       {/* Dynamic Header */}
       <header className="bg-white border-b border-slate-100 p-4 sticky top-0 z-30 shadow-sm">
         <div className="flex justify-between items-center mb-4">
@@ -107,7 +125,7 @@ const App: React.FC = () => {
             Gomex<span className="text-orange-500">Code</span>
           </h1>
           <div className="text-[10px] font-bold text-slate-400 bg-slate-50 border border-slate-100 px-3 py-1 rounded-full uppercase tracking-widest">
-            {products.length} {products.length === 1 ? 'Artikal' : products.length < 5 ? 'Artikla' : 'Artikala'}
+            {view === 'search' ? `${products.length} Šifara` : view === 'dates' ? `${expiryItems.length} Rokova` : 'Admin Panel'}
           </div>
         </div>
 
@@ -139,7 +157,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Content Area */}
-      <main className="flex-1 overflow-y-auto pb-28 bg-slate-50/30">
+      <main className="flex-1 overflow-y-auto bg-slate-50/30">
         {renderContent()}
       </main>
 
